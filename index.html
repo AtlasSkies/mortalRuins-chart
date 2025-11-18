@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ability Sunburst Chart</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js + Sunburst -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sunburst@4"></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="input-panel">
+            <h2>Character Stats</h2>
+
+            <label>Power <input id="Power" type="number" min="1" max="10" step="0.1"></label>
+            <label>Strength <input id="Strength" type="number" min="1" max="10" step="0.1"></label>
+            <label>Speed <input id="Speed" type="number" min="1" max="10" step="0.1"></label>
+            <label>Defense <input id="Defense" type="number" min="1" max="10" step="0.1"></label>
+            <label>Concentration <input id="Concentration" type="number" min="1" max="10" step="0.1"></label>
+            <label>Fortitude <input id="Fortitude" type="number" min="1" max="10" step="0.1"></label>
+            <label>Intelligence <input id="Intelligence" type="number" min="1" max="10" step="0.1"></label>
+            <label>Support <input id="Support" type="number" min="1" max="10" step="0.1"></label>
+            <label>Recovery <input id="Recovery" type="number" min="1" max="10" step="0.1"></label>
+
+            <label class="adapt">
+                Adaptability (Outer Ring)
+                <input id="Adaptability" type="number" min="1" max="10" step="0.1">
+            </label>
+
+            <button id="generateBtn">Generate Chart</button>
+        </div>
+
+        <div class="chart-panel">
+            <canvas id="sunburstChart"></canvas>
+            <canvas id="outerRing"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
