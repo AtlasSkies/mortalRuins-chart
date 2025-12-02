@@ -11,7 +11,7 @@
   <div class="page-container">
     <header>
       <h1>Character Ability Chart</h1>
-      <p class="subtitle">Arcane Registry // Ability Classification Interface</p>
+      <p class="subtitle">Arcane Nexus // Imperial Registry of Extraordinary Beings</p>
     </header>
 
     <main>
@@ -112,33 +112,50 @@
       <button id="closeModalBtn" class="close-btn">×</button>
 
       <div class="gov-header">
-        <div class="gov-tag">[ SECURE ARCANE REGISTRY // LEVEL OMEGA ACCESS ]</div>
-        <div class="gov-meta">
-          RECORD TYPE: CHARACTER DOSSIER · SECTOR: META-HUMAN ASSETS
+        <div class="gov-sigil">⟡</div>
+        <div class="gov-titles">
+          <div class="gov-title-main">Imperial Codex of Arcane Entities</div>
+          <div class="gov-title-sub">Order of the Starbound Seal · Sanctum Archive File</div>
         </div>
       </div>
 
-      <div id="modalWrapper">
-        <!-- LEFT: IMAGE + INFO -->
-        <div class="modal-left">
-          <div class="modal-image-frame">
-            <img id="modalImage" alt="Character File Image">
-          </div>
+      <div class="gov-strip">
+        <span class="gov-strip-left">CLEARANCE: HIGH COUNCIL // EYES OF THE ARCHMAGE ONLY</span>
+        <span class="gov-strip-right">FILE TYPE: LIVING CONSTELLATION DOSSIER</span>
+      </div>
 
+      <div id="modalWrapper">
+
+        <!-- LEFT = IMAGE -->
+        <div class="modal-left">
+          <div class="modal-parchment">
+            <div class="wax-seal">✶</div>
+            <div class="modal-image-frame">
+              <img id="modalImage" alt="Character File Image">
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER = INFO TEXT -->
+        <div class="modal-center">
           <div id="modalInfo" class="modal-info-block">
             <!-- Filled by JS -->
           </div>
         </div>
 
-        <!-- RIGHT: CHART -->
+        <!-- RIGHT = CHART -->
         <div class="modal-right">
           <div class="chart-frame">
+            <div class="chart-frame-label">ARCANE PROFILE WHEEL</div>
             <canvas id="modalChartCanvas" width="550" height="550"></canvas>
+            <div class="rune-border-top">ᚨ ᚱ ᚲ ᚾ ᛟ ᛃ ᛋ</div>
+            <div class="rune-border-bottom">ᛞ ᛚ ᚹ ᛇ ᛏ ᛉ ᛜ</div>
           </div>
           <button id="modalDownloadBtn" class="download-btn">
             Download Character Chart
           </button>
         </div>
+
       </div>
     </div>
   </div>
