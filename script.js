@@ -42,9 +42,9 @@ window.addEventListener("DOMContentLoaded", () => {
   const fileTypeGod = document.getElementById("fileTypeGod");
   const downloadBtn = document.getElementById("modalDownloadBtn");
 
-
-  /* -------- IMAGE UPLOAD -------- */
-
+  /* --------------------------------------------- */
+  /* IMAGE UPLOAD                                  */
+  /* --------------------------------------------- */
   imageUpload.addEventListener("change", e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -61,9 +61,9 @@ window.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-
-  /* -------- STATS -------- */
-
+  /* --------------------------------------------- */
+  /* STATS                                         */
+  /* --------------------------------------------- */
   function getStats() {
     return [
       clamp(parseFloat(statInputs.energy.value), 1, 10),
@@ -81,185 +81,224 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function computeLevel(stats, ov) {
-    return stats.reduce((a,b)=>a+b,0) + ov*3;
+    return stats.reduce((a, b) => a + b, 0) + ov * 3;
   }
 
-
-  /* -------- CHART DRAWING -------- */
-
+  /* --------------------------------------------- */
+  /* DRAW CHART                                    */
+  /* --------------------------------------------- */
   function drawChart(ctx, canvas, stats, overallVal) {
     const w = canvas.width;
     const h = canvas.height;
-    const cx = w/2, cy = h/2;
+    const cx = w / 2;
+    const cy = h / 2;
 
-    ctx.clearRect(0,0,w,h);
+    ctx.clearRect(0, 0, w, h);
 
-    const labels = ["Energy","Speed","Support","Power","Intelligence","Concentration","Perception"];
-    const hues = [0,30,55,130,210,255,280];
+    const labels = [
+      "Energy", "Speed", "Support",
+      "Power", "Intelligence",
+      "Concentration", "Perception"
+    ];
+
+    const hues = [0, 30, 55, 130, 210, 255, 280];
 
     const secCount = 7;
     const rings = 10;
 
     const inner = 60;
-    const outer = 210 * (w/550);  // responsive adjustment
-    const secA = (2*Math.PI)/secCount;
-    const ringT = (outer-inner)/rings;
+    const outer = 210 * (w / 550);
+    const ringT = (outer - inner) / rings;
 
-    /* SUNBURST */
-    for (let i=0;i<secCount;i++) {
-      const a0 = -Math.PI/2 + i*secA;
+    const secA = (2 * Math.PI) / secCount;
+
+    /* ---------------- SUNBURST ---------------- */
+    for (let i = 0; i < secCount; i++) {
+
+      const a0 = -Math.PI / 2 + i * secA;
       const a1 = a0 + secA;
-      const hue = hues[i];
-      const val = stats[i];
 
-      for (let r=0;r<val;r++){
-        const rIn = inner + r*ringT;
+      const val = stats[i];
+      const hue = hues[i];
+
+      for (let r = 0; r < val; r++) {
+        const rIn = inner + r * ringT;
         const rOut = rIn + ringT;
 
         ctx.beginPath();
-        ctx.arc(cx,cy,rOut,a0,a1);
-        ctx.arc(cx,cy,rIn,a1,a0,true);
+        ctx.arc(cx, cy, rOut, a0, a1);
+        ctx.arc(cx, cy, rIn, a1, a0, true);
         ctx.closePath();
-        ctx.fillStyle = `hsl(${hue},${40+r*5}%,${70-r*4}%)`;
+
+        ctx.fillStyle = `hsl(${hue}, ${40 + r * 5}%, ${70 - r * 4}%)`;
         ctx.fill();
       }
-
-      const mid = (a0+a1)/2;
-      ctx.fillStyle="#fff";
-      ctx.font="13px sans-serif";
-      ctx.textAlign="center";
-      ctx.textBaseline="middle";
-      ctx.fillText(labels[i], cx + Math.cos(mid)*130, cy + Math.sin(mid)*130);
     }
 
-    /* INNER */
+    /* -------- INNER CIRCLE -------- */
     ctx.beginPath();
-    ctx.arc(cx,cy,inner*0.45,0,Math.PI*2);
-    ctx.fillStyle="#0b1020";
+    ctx.arc(cx, cy, inner * 0.45, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff";
     ctx.fill();
 
-    /* OUTER RING */
-    const ringIn = outer+20, ringOut=outer+60;
-    const wedgeA = (2*Math.PI)/10;
+    /* ----------------------------------------- */
+    /* CIRCULAR LABELS BETWEEN CHART + RING      */
+    /* ----------------------------------------- */
 
+    const labelRadius = inner + (outer - inner) * 1.15;
+
+    ctx.fillStyle = "#3b2e1d";
+    ctx.font = "14px Georgia, serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    for (let i = 0; i < secCount; i++) {
+      const a0 = -Math.PI / 2 + i * secA;
+      const a1 = a0 + secA;
+      const mid = (a0 + a1) / 2;
+
+      const lx = cx + Math.cos(mid) * labelRadius;
+      const ly = cy + Math.sin(mid) * labelRadius;
+
+      ctx.save();
+      ctx.translate(lx, ly);
+      ctx.rotate(mid + Math.PI / 2);
+      ctx.fillText(labels[i], 0, 0);
+      ctx.restore();
+    }
+
+    /* ---------------- OUTER RING ---------------- */
+    const ringIn = outer + 40;
+    const ringOut = outer + 90;
+    const wedgeA = (2 * Math.PI) / 10;
+
+    /* Base ring */
     ctx.beginPath();
-    ctx.arc(cx,cy,ringOut,0,Math.PI*2);
-    ctx.arc(cx,cy,ringIn,Math.PI*2,0,true);
+    ctx.arc(cx, cy, ringOut, 0, Math.PI * 2);
+    ctx.arc(cx, cy, ringIn, Math.PI * 2, 0, true);
     ctx.closePath();
-    ctx.fillStyle="#1a2038";
+    ctx.fillStyle = "#ffffff";
     ctx.fill();
 
     const full = Math.floor(overallVal);
     const frac = overallVal - full;
 
-    function wedgeColor(i){ return `hsl(220,20%,${70 - i*4}%)`; }
+    function wedgeColor(i) {
+      return `hsl(220, 30%, ${70 - i * 4}%)`;
+    }
 
-    for (let i=0;i<full;i++){
-      const a0=-Math.PI/2+i*wedgeA, a1=a0+wedgeA;
+    for (let i = 0; i < full; i++) {
+      const a0 = -Math.PI / 2 + i * wedgeA;
+      const a1 = a0 + wedgeA;
+
       ctx.beginPath();
-      ctx.arc(cx,cy,ringOut,a0,a1);
-      ctx.arc(cx,cy,ringIn,a1,a0,true);
+      ctx.arc(cx, cy, ringOut, a0, a1);
+      ctx.arc(cx, cy, ringIn, a1, a0, true);
       ctx.closePath();
-      ctx.fillStyle=wedgeColor(i);
+      ctx.fillStyle = wedgeColor(i);
       ctx.fill();
     }
 
-    if (frac>0){
-      const i=full;
-      const a0=-Math.PI/2+i*wedgeA, a1=a0+wedgeA*frac;
+    if (frac > 0) {
+      const i = full;
+      const a0 = -Math.PI / 2 + i * wedgeA;
+      const a1 = a0 + wedgeA * frac;
+
       ctx.beginPath();
-      ctx.arc(cx,cy,ringOut,a0,a1);
-      ctx.arc(cx,cy,ringIn,a1,a0,true);
+      ctx.arc(cx, cy, ringOut, a0, a1);
+      ctx.arc(cx, cy, ringIn, a1, a0, true);
       ctx.closePath();
-      ctx.fillStyle=wedgeColor(i);
+      ctx.fillStyle = wedgeColor(i);
       ctx.fill();
     }
   }
 
-
-  /* -------- AUTO UPDATE -------- */
-
+  /* --------------------------------------------- */
+  /* AUTO UPDATE                                   */
+  /* --------------------------------------------- */
   function updatePreview() {
     const stats = getStats();
     const ov = getOverall();
-    charLevel.value = computeLevel(stats,ov).toFixed(1);
-    drawChart(previewCtx,previewCanvas,stats,ov);
+    charLevel.value = computeLevel(stats, ov).toFixed(1);
+    drawChart(previewCtx, previewCanvas, stats, ov);
   }
 
-  Object.values(statInputs).forEach(i=>i.addEventListener("input",updatePreview));
-  overall.addEventListener("input",updatePreview);
+  Object.values(statInputs).forEach(i => i.addEventListener("input", updatePreview));
+  overall.addEventListener("input", updatePreview);
 
   updatePreview();
 
-
-  /* -------- OPEN MODAL -------- */
-
-  viewBtn.addEventListener("click",()=>{
+  /* --------------------------------------------- */
+  /* OPEN POPUP                                    */
+  /* --------------------------------------------- */
+  viewBtn.addEventListener("click", () => {
     const stats = getStats();
     const ov = getOverall();
-    const lvl = computeLevel(stats,ov);
+    const lvl = computeLevel(stats, ov);
 
     charLevel.value = lvl.toFixed(1);
     fileTypeGod.textContent = charGod.value;
+
     modalImage.src = uploadedImage ? uploadedImage.src : "";
 
     modalInfo.innerHTML = `
-      <div><span class="label">Name:</span> ${charName.value||"Unknown"}</div>
-      <div><span class="label">Species:</span> ${charSpecies.value||"Unknown"}</div>
-      <div><span class="label">Ability:</span> ${charAbility.value||"Unknown"}</div>
+      <div><span class="label">Name:</span> ${charName.value || "Unknown"}</div>
+      <div><span class="label">Species:</span> ${charSpecies.value || "Unknown"}</div>
+      <div><span class="label">Ability:</span> ${charAbility.value || "Unknown"}</div>
       <div><span class="label">Patron God:</span> ${charGod.value}</div>
       <div><span class="label">Danger Level:</span> ${charDanger.value}</div>
       <div><span class="label">Level Index:</span> ${lvl.toFixed(1)}</div>
       <div><span class="label">[Redacted]:</span> ${ov.toFixed(1)}</div>
     `;
 
-    drawChart(modalCtx,modalCanvas,stats,ov);
+    drawChart(modalCtx, modalCanvas, stats, ov);
 
     modal.classList.remove("hidden");
   });
 
-
-  /* -------- CLOSE -------- */
-
-  closeBtn.addEventListener("click",()=>{
+  /* --------------------------------------------- */
+  /* CLOSE POPUP                                   */
+  /* --------------------------------------------- */
+  closeBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
 
-
-  /* -------- DOWNLOAD -------- */
-
-  downloadBtn.addEventListener("click",()=>{
+  /* --------------------------------------------- */
+  /* DOWNLOAD                                      */
+  /* --------------------------------------------- */
+  downloadBtn.addEventListener("click", () => {
 
     const wrap = document.getElementById("modalWrapper");
     const rect = wrap.getBoundingClientRect();
 
-    const tmp=document.createElement("canvas");
-    tmp.width=rect.width*2; tmp.height=rect.height*2;
+    const tmp = document.createElement("canvas");
+    tmp.width = rect.width * 2;
+    tmp.height = rect.height * 2;
+
     const tctx = tmp.getContext("2d");
-    tctx.scale(2,2);
+    tctx.scale(2, 2);
 
-    tctx.fillStyle="#111524";
-    tctx.fillRect(0,0,rect.width,rect.height);
+    tctx.fillStyle = "#ffffff";
+    tctx.fillRect(0, 0, rect.width, rect.height);
 
-    if (uploadedImage){
-      tctx.drawImage(modalImage,10,10,300,300);
+    if (uploadedImage) {
+      tctx.drawImage(modalImage, 10, 10, 300, 300);
     }
 
-    tctx.fillStyle="#fff";
-    tctx.font="18px serif";
-    let y=330;
-    modalInfo.innerText.split("\n").forEach(line=>{
-      tctx.fillText(line,10,y);
-      y+=26;
+    tctx.fillStyle = "#000";
+    tctx.font = "18px Georgia";
+    let y = 330;
+    modalInfo.innerText.split("\n").forEach(line => {
+      tctx.fillText(line, 10, y);
+      y += 26;
     });
 
-    tctx.drawImage(modalCanvas,350,10,494,494);
+    tctx.drawImage(modalCanvas, 350, 10);
 
-    const name=(charName.value||"character").replace(/\s+/g,"");
-    const link=document.createElement("a");
-    link.download=`${name}_mr_characterchart.png`;
-    link.href=tmp.toDataURL();
+    const name = (charName.value || "character").replace(/\s+/g, "");
+    const link = document.createElement("a");
+    link.download = `${name}_mr_characterchart.png`;
+    link.href = tmp.toDataURL();
     link.click();
   });
-
 });
