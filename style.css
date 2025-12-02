@@ -2,12 +2,12 @@ body {
   margin: 0;
   background: #0b1020;
   color: white;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui;
 }
 
 .page-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
 }
 
@@ -88,4 +88,69 @@ button {
 
 canvas {
   margin-top: 20px;
+}
+
+/* Popup Modal */
+
+.modal.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.modal-content {
+  background: #121728;
+  padding: 20px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 1300px;
+  position: relative;
+}
+
+#modalWrapper {
+  display: flex;
+  gap: 30px;
+}
+
+.modal-left {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#modalImage {
+  width: 100%;
+  border-radius: 10px;
+}
+
+#modalInfo {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.modal-right {
+  flex: 1;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  background: #ff3d5f;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 6px 10px;
+  font-size: 20px;
+  cursor: pointer;
 }
