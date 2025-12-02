@@ -15,6 +15,7 @@
     </header>
 
     <main>
+
       <!-- LEFT PANEL -->
       <section class="form-section">
 
@@ -39,19 +40,19 @@
           <label>
             Patron God
             <select id="charGod">
-              <option>Remora</option>
-              <option>Metrador</option>
+              <option selected>Unknown</option>
+              <option>Dead</option>
+              <option>Echara</option>
               <option>Jericho</option>
+              <option>Metrador</option>
+              <option>Ormir</option>
+              <option>Phosiris</option>
+              <option>Remora</option>
+              <option>Shakur</option>
               <option>Skylar</option>
+              <option>The Ruins</option>
               <option>Willow</option>
               <option>Zane</option>
-              <option>Ormir</option>
-              <option>Echara</option>
-              <option>Phosiris</option>
-              <option>Shakur</option>
-              <option>The Ruins</option>
-              <option>Unknown</option>
-              <option>Dead</option>
             </select>
           </label>
 
@@ -66,7 +67,6 @@
             </select>
           </label>
 
-          <!-- Auto-calculated -->
           <label>
             Level
             <input id="charLevel" type="text" readonly>
@@ -130,16 +130,18 @@
         <h2>Chart Preview</h2>
         <canvas id="fullChartCanvas" width="550" height="550"></canvas>
       </section>
+
     </main>
   </div>
 
-  <!-- MODAL POPUP -->
+  <!-- POPUP -->
   <div id="chartModal" class="modal hidden">
     <div class="modal-content">
 
-      <!-- X EXIT BUTTON -->
+      <!-- X CLOSE -->
       <button id="closeModalBtn" class="close-btn">✕</button>
 
+      <!-- HEADER -->
       <div class="gov-header">
         <div class="gov-title-main">Imperial Ruins Archive</div>
         <div class="gov-title-sub">File Type: <span id="fileTypeGod"></span> Dossier</div>
@@ -147,26 +149,27 @@
 
       <div id="modalWrapper">
 
-        <!-- LEFT = IMAGE -->
+        <!-- IMAGE -->
         <div class="modal-left">
           <div class="modal-parchment">
             <div class="modal-image-frame">
-              <img id="modalImage" alt="Character File Image">
+              <img id="modalImage" alt="Character Image">
             </div>
           </div>
         </div>
 
-        <!-- CENTER = INFO TEXT -->
+        <!-- TEXT -->
         <div class="modal-center">
           <div id="modalInfo" class="modal-info-block"></div>
         </div>
 
-        <!-- RIGHT = CHART -->
+        <!-- CHART -->
         <div class="modal-right">
           <div class="chart-frame">
             <div class="chart-frame-label">Ruins Power Wheel</div>
-            <canvas id="modalChartCanvas" width="520" height="520"></canvas>
+            <canvas id="modalChartCanvas" width="494" height="494"></canvas>
           </div>
+
           <button id="modalDownloadBtn" class="download-btn">
             Download Character Chart
           </button>
