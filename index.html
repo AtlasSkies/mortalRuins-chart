@@ -11,6 +11,7 @@
   <div class="page-container">
     <header>
       <h1>Character Ability Chart</h1>
+      <p class="subtitle">Arcane Registry // Ability Classification Interface</p>
     </header>
 
     <main>
@@ -20,24 +21,66 @@
         <h2>Character Information</h2>
 
         <div class="form-grid">
-          <label>Name<input id="charName" type="text"></label>
-          <label>Species<input id="charSpecies" type="text"></label>
-          <label>Ability<input id="charAbility" type="text"></label>
-          <label>Level<input id="charLevel" type="text"></label>
-          <label>Danger Level<input id="charDanger" type="text"></label>
+          <label>
+            Name
+            <input id="charName" type="text">
+          </label>
+          <label>
+            Species
+            <input id="charSpecies" type="text">
+          </label>
+          <label>
+            Ability
+            <input id="charAbility" type="text">
+          </label>
+
+          <!-- LEVEL IS AUTO-CALCULATED -->
+          <label>
+            Level
+            <input id="charLevel" type="text" readonly>
+          </label>
+
+          <label>
+            Danger Level
+            <input id="charDanger" type="text">
+          </label>
         </div>
 
         <h2>Stats (1–10)</h2>
 
         <div class="form-grid stats-grid">
-          <label>Overall Rating<input id="overallRating" type="number" min="1" max="10" step="0.1" value="7.5"></label>
-          <label>Energy<input id="statEnergy" type="number" min="1" max="10" step="0.1" value="7"></label>
-          <label>Speed<input id="statSpeed" type="number" min="1" max="10" step="0.1" value="6"></label>
-          <label>Support<input id="statSupport" type="number" min="1" max="10" step="0.1" value="5"></label>
-          <label>Power<input id="statPower" type="number" min="1" max="10" step="0.1" value="8"></label>
-          <label>Intelligence<input id="statIntelligence" type="number" min="1" max="10" step="0.1" value="9"></label>
-          <label>Concentration<input id="statConcentration" type="number" min="1" max="10" step="0.1" value="7"></label>
-          <label>Perception<input id="statPerception" type="number" min="1" max="10" step="0.1" value="6"></label>
+          <label>
+            Overall Rating
+            <input id="overallRating" type="number" min="1" max="10" step="0.1" value="7.5">
+          </label>
+          <label>
+            Energy
+            <input id="statEnergy" type="number" min="1" max="10" step="0.1" value="7">
+          </label>
+          <label>
+            Speed
+            <input id="statSpeed" type="number" min="1" max="10" step="0.1" value="6">
+          </label>
+          <label>
+            Support
+            <input id="statSupport" type="number" min="1" max="10" step="0.1" value="5">
+          </label>
+          <label>
+            Power
+            <input id="statPower" type="number" min="1" max="10" step="0.1" value="8">
+          </label>
+          <label>
+            Intelligence
+            <input id="statIntelligence" type="number" min="1" max="10" step="0.1" value="9">
+          </label>
+          <label>
+            Concentration
+            <input id="statConcentration" type="number" min="1" max="10" step="0.1" value="7">
+          </label>
+          <label>
+            Perception
+            <input id="statPerception" type="number" min="1" max="10" step="0.1" value="6">
+          </label>
         </div>
 
         <h2>Character Image</h2>
@@ -47,10 +90,9 @@
           <input id="imageUpload" type="file" accept="image/*">
         </label>
 
-        <img id="imagePreview">
+        <img id="imagePreview" alt="Character Preview">
 
         <div class="button-row">
-          <button id="updateChartBtn">Update Chart</button>
           <button id="viewChartBtn">View Character Chart</button>
         </div>
 
@@ -66,29 +108,39 @@
 
   <!-- MODAL POPUP -->
   <div id="chartModal" class="modal hidden">
-
     <div class="modal-content">
-
       <button id="closeModalBtn" class="close-btn">×</button>
 
-      <div id="modalWrapper">
-
-        <!-- LEFT SIDE: IMAGE + INFO -->
-        <div class="modal-left">
-          <img id="modalImage">
-          <div id="modalInfo"></div>
+      <div class="gov-header">
+        <div class="gov-tag">[ SECURE ARCANE REGISTRY // LEVEL OMEGA ACCESS ]</div>
+        <div class="gov-meta">
+          RECORD TYPE: CHARACTER DOSSIER · SECTOR: META-HUMAN ASSETS
         </div>
-
-        <!-- RIGHT SIDE: CHART -->
-        <div class="modal-right">
-          <canvas id="modalChartCanvas" width="550" height="550"></canvas>
-          <button id="modalDownloadBtn">Download Character Chart</button>
-        </div>
-
       </div>
 
-    </div>
+      <div id="modalWrapper">
+        <!-- LEFT: IMAGE + INFO -->
+        <div class="modal-left">
+          <div class="modal-image-frame">
+            <img id="modalImage" alt="Character File Image">
+          </div>
 
+          <div id="modalInfo" class="modal-info-block">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT: CHART -->
+        <div class="modal-right">
+          <div class="chart-frame">
+            <canvas id="modalChartCanvas" width="550" height="550"></canvas>
+          </div>
+          <button id="modalDownloadBtn" class="download-btn">
+            Download Character Chart
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
 </body>
