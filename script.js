@@ -85,6 +85,31 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   /* --------------------------------------------- */
+  /* ARC-ALIGNED TEXT FUNCTION                     */
+  /* --------------------------------------------- */
+  function drawTextAlongArc(ctx, text, cx, cy, radius, startAngle) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(startAngle);
+
+    const chars = text.split("");
+    const angleStep = (8 * Math.PI / 180); // spacing per character
+
+    ctx.rotate(-angleStep * (chars.length - 1) / 2);
+
+    for (let i = 0; i < chars.length; i++) {
+      ctx.save();
+      ctx.translate(0, -radius);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillText(chars[i], 0, 0);
+      ctx.restore();
+      ctx.rotate(angleStep);
+    }
+
+    ctx.restore();
+  }
+
+  /* --------------------------------------------- */
   /* DRAW CHART                                    */
   /* --------------------------------------------- */
   function drawChart(ctx, canvas, stats, overallVal) {
@@ -142,10 +167,10 @@ window.addEventListener("DOMContentLoaded", () => {
     ctx.fill();
 
     /* ----------------------------------------- */
-    /* CIRCULAR LABELS BETWEEN CHART + RING      */
+    /* ARC-ALIGNED LABELS BETWEEN CHART & RING   */
     /* ----------------------------------------- */
 
-    const labelRadius = inner + (outer - inner) * 1.15;
+    const labelRadius = inner + (outer - inner) * 1.18;
 
     ctx.fillStyle = "#3b2e1d";
     ctx.font = "14px Georgia, serif";
@@ -153,18 +178,16 @@ window.addEventListener("DOMContentLoaded", () => {
     ctx.textBaseline = "middle";
 
     for (let i = 0; i < secCount; i++) {
-      const a0 = -Math.PI / 2 + i * secA;
-      const a1 = a0 + secA;
-      const mid = (a0 + a1) / 2;
+      const midAngle = -Math.PI / 2 + secA * (i + 0.5);
 
-      const lx = cx + Math.cos(mid) * labelRadius;
-      const ly = cy + Math.sin(mid) * labelRadius;
-
-      ctx.save();
-      ctx.translate(lx, ly);
-      ctx.rotate(mid + Math.PI / 2);
-      ctx.fillText(labels[i], 0, 0);
-      ctx.restore();
+      drawTextAlongArc(
+        ctx,
+        labels[i],
+        cx,
+        cy,
+        labelRadius,
+        midAngle
+      );
     }
 
     /* ---------------- OUTER RING ---------------- */
