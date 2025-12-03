@@ -108,9 +108,10 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   /* --------------------------------------------- */
-  /* DRAW CHART — WITH RING SHRUNK 10%             */
+  /* UPDATED DRAW CHART                            */
   /* --------------------------------------------- */
   function drawChart(ctx, canvas, stats, overallVal) {
+
     const w = canvas.width;
     const h = canvas.height;
     const cx = w / 2;
@@ -118,21 +119,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
     ctx.clearRect(0, 0, w, h);
 
-    const hues = [0, 30, 55, 130, 210, 255, 280];
-
     const secCount = 7;
     const rings = 10;
 
-    // SHRINKED BY 10%
-    const scale = 0.90;
+    /* Sunburst Scale Up */
+    const sunburstScale = 1.08;
 
-    const inner = 60 * scale;
-    const outer = (210 * (w / 550)) * scale;
+    /* Ring reduced only slightly (option A ~15%) */
+    const ringScale = 0.85;
+
+    const maxRadius = (w / 2) * sunburstScale;
+
+    const inner = 0;                       // Start at center
+    const outer = maxRadius * 0.78;
     const ringT = (outer - inner) / rings;
 
     const secA = (2 * Math.PI) / secCount;
+    const hues = [0, 30, 55, 130, 210, 255, 280];
 
-    /* ---------------- SUNBURST ---------------- */
+    /* --------- SUNBURST --------- */
     for (let i = 0; i < secCount; i++) {
 
       const a0 = -Math.PI / 2 + i * secA;
@@ -150,23 +155,22 @@ window.addEventListener("DOMContentLoaded", () => {
         ctx.arc(cx, cy, rIn, a1, a0, true);
         ctx.closePath();
 
-        ctx.fillStyle = `hsl(${hue}, ${40 + r * 5}%, ${70 - r * 4}%)`;
+        ctx.fillStyle = `hsl(${hue}, ${45 + r * 4}%, ${72 - r * 4}%)`;
         ctx.fill();
       }
     }
 
-    /* INNER CIRCLE */
+    /* Center Circle */
     ctx.beginPath();
-    ctx.arc(cx, cy, inner * 0.45, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
+    ctx.arc(cx, cy, outer * 0.12, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    /* OUTER WHEEL — SHRUNK 10% */
-    const ringIn = outer + (40 * scale);
-    const ringOut = outer + (90 * scale);
+    /* --------- OUTER RING --------- */
+    const ringIn = outer + (28 * ringScale);
+    const ringOut = outer + (74 * ringScale);
     const wedgeA = (2 * Math.PI) / 10;
 
-    // Base ring
     ctx.beginPath();
     ctx.arc(cx, cy, ringOut, 0, Math.PI * 2);
     ctx.arc(cx, cy, ringIn, Math.PI * 2, 0, true);
@@ -235,15 +239,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     modalImage.src = uploadedImage ? uploadedImage.src : "";
 
-    modalInfo.innerHTML = `
-      <div><span class="label">Name:</span> ${charName.value || "Unknown"}</div>
-      <div><span class="label">Character ID:</span> ${getCharacterID()}</div>
-      <div><span class="label">Species:</span> ${charSpecies.value || "Unknown"}</div>
-      <div><span class="label">Ability:</span> ${charAbility.value || "Unknown"}</div>
-      <div><span class="label">Patron God:</span> ${charGod.value}</div>
-      <div><span class="label">Danger Level:</span> ${charDanger.value}</div>
-      <div><span class="label">Level Index:</span> ${lvl.toFixed(1)}</div>
-    `;
+    modalInfo.innerHTML =
+      `<div><span class="label">Name:</span> ${charName.value || "Unknown"}</div>
+       <div><span class="label">Character ID:</span> ${getCharacterID()}</div>
+       <div><span class="label">Species:</span> ${charSpecies.value || "Unknown"}</div>
+       <div><span class="label">Ability:</span> ${charAbility.value || "Unknown"}</div>
+       <div><span class="label">Patron God:</span> ${charGod.value}</div>
+       <div><span class="label">Danger Level:</span> ${charDanger.value}</div>
+       <div><span class="label">Level Index:</span> ${lvl.toFixed(1)}</div>`;
 
     drawChart(modalCtx, modalCanvas, stats, ov);
 
@@ -261,7 +264,6 @@ window.addEventListener("DOMContentLoaded", () => {
   /* DOWNLOAD CHART                                */
   /* --------------------------------------------- */
   downloadBtn.addEventListener("click", () => {
-
     const wrap = document.getElementById("modalWrapper");
     const rect = wrap.getBoundingClientRect();
 
@@ -295,4 +297,5 @@ window.addEventListener("DOMContentLoaded", () => {
     link.href = tmp.toDataURL();
     link.click();
   });
+
 });
