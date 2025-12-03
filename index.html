@@ -22,19 +22,21 @@
         <h2>Character Information</h2>
 
         <div class="form-grid">
+
+          <!-- NAME -->
           <label>
             Name
             <input id="charName" type="text">
           </label>
 
+          <!-- CHARACTER ID (Two Inputs) -->
           <label>
             Character ID
-            <input
-              id="charId"
-              type="text"
-              placeholder="Character ID (ABC-123456789)"
-              pattern="[A-Za-z]{3}-[0-9]{9}"
-            >
+            <div class="id-row">
+              <input id="charIdLetters" type="text" maxlength="3" placeholder="ABC">
+              <span class="id-dash">—</span>
+              <input id="charIdNumbers" type="text" maxlength="9" placeholder="123456789">
+            </div>
           </label>
 
           <label>
@@ -81,6 +83,7 @@
             Level
             <input id="charLevel" type="text" readonly>
           </label>
+
         </div>
 
         <h2>Stats (1–10)</h2>
@@ -138,7 +141,7 @@
       <!-- RIGHT PANEL -->
       <section class="chart-section">
         <h2>Chart Preview</h2>
-        <canvas id="fullChartCanvas" width="550" height="550"></canvas>
+        <canvas id="fullChartCanvas" width="450" height="450"></canvas>
       </section>
 
     </main>
@@ -148,10 +151,8 @@
   <div id="chartModal" class="modal hidden">
     <div class="modal-content">
 
-      <!-- X CLOSE -->
       <button id="closeModalBtn" class="close-btn">✕</button>
 
-      <!-- HEADER -->
       <div class="gov-header">
         <div class="gov-title-main">Imperial Ruins Archive</div>
         <div class="gov-title-sub">File Type: <span id="fileTypeGod"></span> Dossier</div>
@@ -177,7 +178,7 @@
         <div class="modal-right">
           <div class="chart-frame">
             <div class="chart-frame-label">Ruins Power Wheel</div>
-            <canvas id="modalChartCanvas" width="494" height="494"></canvas>
+            <canvas id="modalChartCanvas" width="350" height="350"></canvas>
           </div>
 
           <button id="modalDownloadBtn" class="download-btn">
