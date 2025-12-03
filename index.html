@@ -1,147 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Character Ability Chart</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
-</head>
-<body>
+<div class="form-grid">
 
-  <div class="page-container">
-    <header>
-      <h1>Character Ability Chart</h1>
-      <p class="subtitle">Arcane Registry // Ability Classification Interface</p>
-    </header>
+  <label>
+    <input id="charName" type="text" placeholder="Name">
+  </label>
 
-    <main>
-      <!-- LEFT PANEL -->
-      <section class="form-section">
+  <label>
+    <input id="charSpecies" type="text" placeholder="Species">
+  </label>
 
-        <h2>Character Information</h2>
+  <label>
+    <input id="charAbility" type="text" placeholder="Ability">
+  </label>
 
-        <div class="form-grid">
-          <label>
-            Name
-            <input id="charName" type="text">
-          </label>
-          <label>
-            Species
-            <input id="charSpecies" type="text">
-          </label>
-          <label>
-            Ability
-            <input id="charAbility" type="text">
-          </label>
+  <label>
+    <select id="charGod">
+      <option selected>Unknown</option>
+      <option>Dead</option>
+      <option>Echara</option>
+      <option>Jericho</option>
+      <option>Metrador</option>
+      <option>Ormir</option>
+      <option>Phosiris</option>
+      <option>Remora</option>
+      <option>Shakur</option>
+      <option>Skylar</option>
+      <option>The Ruins</option>
+      <option>Willow</option>
+      <option>Zane</option>
+    </select>
+  </label>
 
-          <!-- LEVEL IS AUTO-CALCULATED -->
-          <label>
-            Level
-            <input id="charLevel" type="text" readonly>
-          </label>
+  <label>
+    <select id="charDanger">
+      <option>None</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>High</option>
+      <option>Ultra</option>
+    </select>
+  </label>
 
-          <label>
-            Danger Level
-            <input id="charDanger" type="text">
-          </label>
-        </div>
+  <label>
+    <input id="charLevel" type="text" readonly placeholder="Level">
+  </label>
 
-        <h2>Stats (1–10)</h2>
-
-        <div class="form-grid stats-grid">
-          <label>
-            Overall Rating
-            <input id="overallRating" type="number" min="1" max="10" step="0.1" value="7.5">
-          </label>
-          <label>
-            Energy
-            <input id="statEnergy" type="number" min="1" max="10" step="0.1" value="7">
-          </label>
-          <label>
-            Speed
-            <input id="statSpeed" type="number" min="1" max="10" step="0.1" value="6">
-          </label>
-          <label>
-            Support
-            <input id="statSupport" type="number" min="1" max="10" step="0.1" value="5">
-          </label>
-          <label>
-            Power
-            <input id="statPower" type="number" min="1" max="10" step="0.1" value="8">
-          </label>
-          <label>
-            Intelligence
-            <input id="statIntelligence" type="number" min="1" max="10" step="0.1" value="9">
-          </label>
-          <label>
-            Concentration
-            <input id="statConcentration" type="number" min="1" max="10" step="0.1" value="7">
-          </label>
-          <label>
-            Perception
-            <input id="statPerception" type="number" min="1" max="10" step="0.1" value="6">
-          </label>
-        </div>
-
-        <h2>Character Image</h2>
-
-        <label class="file-label">
-          Upload Image
-          <input id="imageUpload" type="file" accept="image/*">
-        </label>
-
-        <img id="imagePreview" alt="Character Preview">
-
-        <div class="button-row">
-          <button id="viewChartBtn">View Character Chart</button>
-        </div>
-
-      </section>
-
-      <!-- RIGHT PANEL -->
-      <section class="chart-section">
-        <h2>Chart Preview</h2>
-        <canvas id="fullChartCanvas" width="550" height="550"></canvas>
-      </section>
-    </main>
-  </div>
-
-  <!-- MODAL POPUP -->
-  <div id="chartModal" class="modal hidden">
-    <div class="modal-content">
-      <button id="closeModalBtn" class="close-btn">×</button>
-
-      <div class="gov-header">
-        <div class="gov-tag">[ SECURE ARCANE REGISTRY // LEVEL OMEGA ACCESS ]</div>
-        <div class="gov-meta">
-          RECORD TYPE: CHARACTER DOSSIER · SECTOR: META-HUMAN ASSETS
-        </div>
-      </div>
-
-      <div id="modalWrapper">
-        <!-- LEFT: IMAGE + INFO -->
-        <div class="modal-left">
-          <div class="modal-image-frame">
-            <img id="modalImage" alt="Character File Image">
-          </div>
-
-          <div id="modalInfo" class="modal-info-block">
-            <!-- Filled by JS -->
-          </div>
-        </div>
-
-        <!-- RIGHT: CHART -->
-        <div class="modal-right">
-          <div class="chart-frame">
-            <canvas id="modalChartCanvas" width="550" height="550"></canvas>
-          </div>
-          <button id="modalDownloadBtn" class="download-btn">
-            Download Character Chart
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</body>
-</html>
+</div>
