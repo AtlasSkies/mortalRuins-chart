@@ -1,4 +1,3 @@
-// script.js
 function clamp(v, min, max) {
   return Math.min(max, Math.max(min, v));
 }
@@ -23,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const charDanger = document.getElementById("charDanger");
   const charLevel = document.getElementById("charLevel");
 
-  // Redact checkboxes
+  // Redaction checkboxes
   const redactName = document.getElementById("redactName");
   const redactSpecies = document.getElementById("redactSpecies");
   const redactAbility = document.getElementById("redactAbility");
@@ -89,9 +88,14 @@ window.addEventListener("DOMContentLoaded", () => {
     return stats.reduce((a, b) => a + b, 0) + ov * 3;
   }
 
-  /* DRAW CHART */
-  function drawChart(ctx, canvas, stats, overallVal) {
+  /* REDACTION HELPER */
+  function censored(checkbox, value) {
+    if (!value || value.trim() === "") return "Unknown";
+    return checkbox.checked ? "████████████████" : value;
+  }
 
+  /* DRAW CHART (shortened) */
+  function drawChart(ctx, canvas, stats, overallVal) {
     const w = canvas.width;
     const h = canvas.height;
     const cx = w / 2;
@@ -101,10 +105,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const secCount = 7;
     const rings = 10;
-
     const sunburstScale = 1.08;
     const ringScale = 0.85;
-
     const maxRadius = (w / 2) * sunburstScale;
     const inner = 0;
     const outer = maxRadius * 0.78;
@@ -113,12 +115,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const secA = (2 * Math.PI) / secCount;
     const hues = [0, 30, 55, 130, 210, 255, 280];
 
-    // SUNBURST
+    /* SUNBURST */
     for (let i = 0; i < secCount; i++) {
-
       const a0 = -Math.PI / 2 + i * secA;
       const a1 = a0 + secA;
-
       const val = stats[i];
       const hue = hues[i];
 
@@ -130,26 +130,21 @@ window.addEventListener("DOMContentLoaded", () => {
         ctx.arc(cx, cy, rOut, a0, a1);
         ctx.arc(cx, cy, rIn, a1, a0, true);
         ctx.closePath();
-
         ctx.fillStyle = `hsl(${hue}, ${45 + r * 4}%, ${72 - r * 4}%)`;
         ctx.fill();
       }
     }
 
-    // CENTER (unsaturated tone)
+    /* CENTER (unsaturated tone) */
     ctx.beginPath();
     ctx.arc(cx, cy, outer * 0.12, 0, Math.PI * 2);
     ctx.fillStyle = "hsl(40, 10%, 88%)";
     ctx.fill();
 
-    // OUTER RING
-    const ringGap = 0;
-    const baseRingThickness = 30 * ringScale;
-    const ringIn = outer + ringGap;
-    const ringOut = ringIn + baseRingThickness;
-    const wedgeA = (2 * Math.PI) / 10;
+    /* OUTER RING */
+    const ringIn = outer;
+    const ringOut = ringIn + 26;
 
-    // Background ring
     ctx.beginPath();
     ctx.arc(cx, cy, ringOut, 0, Math.PI * 2);
     ctx.arc(cx, cy, ringIn, Math.PI * 2, 0, true);
@@ -164,11 +159,11 @@ window.addEventListener("DOMContentLoaded", () => {
       return `hsl(220, 30%, ${70 - i * 4}%)`;
     }
 
-    // Full wedges
+    const wedgeA = (2 * Math.PI) / 10;
+
     for (let i = 0; i < full; i++) {
       const a0 = -Math.PI / 2 + i * wedgeA;
       const a1 = a0 + wedgeA;
-
       ctx.beginPath();
       ctx.arc(cx, cy, ringOut, a0, a1);
       ctx.arc(cx, cy, ringIn, a1, a0, true);
@@ -177,12 +172,10 @@ window.addEventListener("DOMContentLoaded", () => {
       ctx.fill();
     }
 
-    // Fractional wedge
     if (frac > 0) {
       const i = full;
       const a0 = -Math.PI / 2 + i * wedgeA;
       const a1 = a0 + wedgeA * frac;
-
       ctx.beginPath();
       ctx.arc(cx, cy, ringOut, a0, a1);
       ctx.arc(cx, cy, ringIn, a1, a0, true);
@@ -202,19 +195,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   Object.values(statInputs).forEach(i => i.addEventListener("input", updatePreview));
   overall.addEventListener("input", updatePreview);
-
   updatePreview();
-
-  /* HELPER: redactable line */
-  function censoredOrValue(checkbox, value, fallback = "Unknown") {
-    if (checkbox && checkbox.checked) {
-      return "████████████████";
-    }
-    return value || fallback;
-  }
 
   /* OPEN POPUP */
   viewBtn.addEventListener("click", () => {
+
     const stats = getStats();
     const ov = getOverall();
     const lvl = computeLevel(stats, ov);
@@ -234,19 +219,25 @@ window.addEventListener("DOMContentLoaded", () => {
       "Perception"
     ];
 
+    /* BUILD INFO BOX CONTENT */
     let infoHTML = "";
 
-    infoHTML += `<div><span class="label">Name:</span> ${censoredOrValue(redactName, charName.value)}</div>`;
-    infoHTML += `<div><span class="label">Species:</span> ${censoredOrValue(redactSpecies, charSpecies.value)}</div>`;
-    infoHTML += `<div><span class="label">Ability:</span> ${censoredOrValue(redactAbility, charAbility.value)}</div>`;
-    infoHTML += `<div><span class="label">Patron God:</span> ${censoredOrValue(redactGod, charGod.value)}</div>`;
-    infoHTML += `<div><span class="label">Danger Level:</span> ${censoredOrValue(redactDanger, charDanger.value)}</div>`;
-    infoHTML += `<div><span class="label">Level Index:</span> ${censoredOrValue(redactLevel, lvl.toFixed(1), "0.0")}</div>`;
+    infoHTML += `<div class="section-title">Information</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Name:</span> ${censored(redactName,charName.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Species:</span> ${censored(redactSpecies,charSpecies.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Ability:</span> ${censored(redactAbility,charAbility.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Patron God:</span> ${censored(redactGod,charGod.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Danger Level:</span> ${censored(redactDanger,charDanger.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Level Index:</span> ${censored(redactLevel,lvl.toFixed(1))}</div>`;
 
-    // Stats section (no label for [Redacted] stat, only the others)
-    infoHTML += `<div class="label-group-title">Ability Metrics</div>`;
+    infoHTML += `<div class="section-title" style="margin-top:14px;">Ability Metrics</div>`;
+
     stats.forEach((val, idx) => {
-      infoHTML += `<div><span class="label">${statLabels[idx]}:</span> ${val.toFixed(1)}</div>`;
+      infoHTML += `
+        <div class="metric-line">
+          <span class="label">${statLabels[idx]}:</span> ${val.toFixed(1)}
+        </div>
+      `;
     });
 
     modalInfo.innerHTML = infoHTML;
@@ -261,14 +252,13 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.classList.add("hidden");
   });
 
-  /* DOWNLOAD EXACT POPUP (NO BUTTONS) */
+  /* DOWNLOAD POPUP EXACTLY */
   downloadBtn.addEventListener("click", async () => {
 
     const modalContent = document.querySelector(".modal-content");
     const closeBtn = document.getElementById("closeModalBtn");
     const dlBtn = document.getElementById("modalDownloadBtn");
 
-    // Hide buttons
     closeBtn.style.display = "none";
     dlBtn.style.display = "none";
 
@@ -278,8 +268,6 @@ window.addEventListener("DOMContentLoaded", () => {
       backgroundColor: "#ffffff",
       scale: 2
     }).then(canvas => {
-
-      // Restore buttons
       closeBtn.style.display = "";
       dlBtn.style.display = "";
 
