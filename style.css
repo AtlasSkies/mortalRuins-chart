@@ -87,20 +87,21 @@ select:focus {
   border-color: #a47a44;
 }
 
+/* 25% larger preview image */
 #imagePreview {
-  width: 140px;
-  height: 140px;
+  width: 175px;   /* was 140 */
+  height: 175px;  /* was 140 */
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 2px solid #c8b08b;
   background: #fff;
 }
 
-/* SHRUNK + AUTO-FIT MODAL IMAGE */
+/* SHRUNK + AUTO-FIT MODAL IMAGE (25% larger) */
 .modal-image-frame {
-  width: 260px;
-  height: 330px;
-  border-radius: 12px;
+  width: 325px;      /* was 260 */
+  height: 410px;     /* was 330 */
+  border-radius: 14px;
   overflow: hidden;
   border: 2px solid #c8b08b;
   display: flex;
@@ -110,11 +111,11 @@ select:focus {
 }
 
 #modalImage {
-  width: 240px;
+  width: 300px;        /* was 240 */
   height: auto;
-  max-height: 320px;
+  max-height: 395px;   /* was 320 */
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 button {
@@ -208,4 +209,22 @@ canvas {
   margin-bottom: 6px;
   font-weight: bold;
   color: #4d3a26;
+}
+
+/* Optional: basic styling for file label & buttons */
+.file-label {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.file-label input[type="file"] {
+  padding: 4px;
+  background: transparent;
+  border: none;
+}
+
+.button-row {
+  margin-top: 12px;
 }
