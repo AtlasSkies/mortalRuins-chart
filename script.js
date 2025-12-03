@@ -108,7 +108,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   /* --------------------------------------------- */
-  /* UPDATED DRAW CHART (sunburst + ring inward)   */
+  /* DRAW CHART (sunburst + ring hugging it)       */
   /* --------------------------------------------- */
   function drawChart(ctx, canvas, stats, overallVal) {
 
@@ -130,8 +130,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const maxRadius = (w / 2) * sunburstScale;
 
-    const inner = 0;                        /* Start sunburst at center */
-    const outer = maxRadius * 0.78;
+    const inner = 0;                // start sunburst at center
+    const outer = maxRadius * 0.78; // outer radius of sunburst
     const ringT = (outer - inner) / rings;
 
     const secA = (2 * Math.PI) / secCount;
@@ -166,15 +166,13 @@ window.addEventListener("DOMContentLoaded", () => {
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    /* --------- OUTER RING (pulled inward 25%) --------- */
+    /* --------- OUTER RING (hugging the sunburst) --------- */
 
-    const originalOffsetInner = 28 * ringScale;
-    const originalOffsetOuter = 74 * ringScale;
+    const ringGap = 0; // no space between sunburst and ring
+    const baseRingThickness = 30 * ringScale; // thickness of ring
 
-    const offsetShift = 0.25;   /* 25% closer to sunburst */
-
-    const ringIn = outer + originalOffsetInner * (1 - offsetShift);
-    const ringOut = outer + originalOffsetOuter * (1 - offsetShift);
+    const ringIn = outer + ringGap;              // starts right at sunburst edge
+    const ringOut = ringIn + baseRingThickness;  // extends outward by thickness
 
     const wedgeA = (2 * Math.PI) / 10;
 
@@ -264,7 +262,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   /* --------------------------------------------- */
-  /* CLOSE POPUP                                    */
+  /* CLOSE POPUP                                   */
   /* --------------------------------------------- */
   closeBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
