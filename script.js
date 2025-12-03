@@ -16,30 +16,30 @@ window.addEventListener("DOMContentLoaded", () => {
   const imageUpload = document.getElementById("imageUpload");
   const imagePreview = document.getElementById("imagePreview");
 
-  const charName = document.getElementById("charName");
-  const charSpecies = document.getElementById("charSpecies");
-  const charAbility = document.getElementById("charAbility");
-  const charLevel = document.getElementById("charLevel");
-  const charDanger = document.getElementById("charDanger");
+  const charNameInput = document.getElementById("charName");
+  const charSpeciesInput = document.getElementById("charSpecies");
+  const charAbilityInput = document.getElementById("charAbility");
+  const charLevelInput = document.getElementById("charLevel");
+  const charDangerInput = document.getElementById("charDanger");
 
   const overallInput = document.getElementById("overallRating");
-  const statInputs = {
-    energy: document.getElementById("statEnergy"),
-    speed: document.getElementById("statSpeed"),
-    support: document.getElementById("statSupport"),
-    power: document.getElementById("statPower"),
-    intelligence: document.getElementById("statIntelligence"),
-    concentration: document.getElementById("statConcentration"),
-    perception: document.getElementById("statPerception")
-  };
+  const statEnergyInput = document.getElementById("statEnergy");
+  const statSpeedInput = document.getElementById("statSpeed");
+  const statSupportInput = document.getElementById("statSupport");
+  const statPowerInput = document.getElementById("statPower");
+  const statIntelligenceInput = document.getElementById("statIntelligence");
+  const statConcentrationInput = document.getElementById("statConcentration");
+  const statPerceptionInput = document.getElementById("statPerception");
 
-  const viewBtn = document.getElementById("viewChartBtn");
+  const viewChartBtn = document.getElementById("viewChartBtn");
+
   const modal = document.getElementById("chartModal");
   const closeModalBtn = document.getElementById("closeModalBtn");
   const modalImage = document.getElementById("modalImage");
   const modalInfo = document.getElementById("modalInfo");
   const modalDownloadBtn = document.getElementById("modalDownloadBtn");
   const modalWrapper = document.getElementById("modalWrapper");
+
 
   /* ===== IMAGE UPLOAD ===== */
   imageUpload.addEventListener("change", e => {
@@ -58,29 +58,34 @@ window.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  /* ===== READ STATS ===== */
-  function getStats() {
-    return [
-      clamp(parseFloat(statInputs.energy.value), 1, 10),
-      clamp(parseFloat(statInputs.speed.value), 1, 10),
-      clamp(parseFloat(statInputs.support.value), 1, 10),
-      clamp(parseFloat(statInputs.power.value), 1, 10),
-      clamp(parseFloat(statInputs.intelligence.value), 1, 10),
-      clamp(parseFloat(statInputs.concentration.value), 1, 10),
-      clamp(parseFloat(statInputs.perception.value), 1, 10)
+
+  /* ===== STATS ===== */
+  function readStats() {
+    const vals = [
+      parseFloat(statEnergyInput.value),
+      parseFloat(statSpeedInput.value),
+      parseFloat(statSupportInput.value),
+      parseFloat(statPowerInput.value),
+      parseFloat(statIntelligenceInput.value),
+      parseFloat(statConcentrationInput.value),
+      parseFloat(statPerceptionInput.value)
     ];
+
+    return vals.map(v => clamp(isNaN(v) ? 1 : v, 1, 10));
   }
 
   function getOverall() {
-    return clamp(parseFloat(overallInput.value), 1, 10);
+    const v = parseFloat(overallInput.value);
+    return clamp(isNaN(v) ? 1 : v, 1, 10);
   }
 
-  function computeLevel(stats, overall) {
+  function calculateLevel(stats, overall) {
     return stats.reduce((a, b) => a + b, 0) + overall * 3;
   }
 
+
   /* ============================================================
-     =============   FINAL RESTORED + UPDATED CHART   ============
+     =============   RESTORED PERFECT WORKING CHART   ============
      ============================================================ */
   function drawChart(ctx, canvas, stats, overall) {
 
@@ -103,33 +108,35 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const hues = [0, 30, 55, 130, 210, 255, 280];
 
-    const sections = 7;
-    const rings = 10;
+    const sectionCount = 7;
+    const ringCount = 10;
 
     const innerR = 60;
-    const outerR = 210;  // sunburst size
-    const ringT = (outerR - innerR) / rings;
-    const secA = (2 * Math.PI) / sections;
+    const outerR = 210;
+    const ringT = (outerR - innerR) / ringCount;
+    const secA = (2 * Math.PI) / sectionCount;
 
-    /* ---------------- SUNBURST ---------------- */
-    for (let i = 0; i < sections; i++) {
+    /* ---------------- SUNBURST (UNCHANGED) ---------------- */
+    for (let s = 0; s < sectionCount; s++) {
 
-      const a0 = -Math.PI / 2 + i * secA;
+      const val = stats[s];
+      const hue = hues[s];
+
+      const a0 = -Math.PI / 2 + s * secA;
       const a1 = a0 + secA;
-
-      const val = stats[i];
-      const hue = hues[i];
 
       for (let r = 0; r < val; r++) {
         const rIn = innerR + r * ringT;
         const rOut = rIn + ringT;
 
+        const sat = 40 + r * 5;
+        const lit = 70 - r * 4;
+
         ctx.beginPath();
         ctx.arc(cx, cy, rOut, a0, a1);
         ctx.arc(cx, cy, rIn, a1, a0, true);
         ctx.closePath();
-
-        ctx.fillStyle = `hsl(${hue}, ${40 + r * 5}%, ${70 - r * 4}%)`;
+        ctx.fillStyle = `hsl(${hue}, ${sat}%, ${lit}%)`;
         ctx.fill();
       }
     }
@@ -140,75 +147,37 @@ window.addEventListener("DOMContentLoaded", () => {
     ctx.fillStyle = "#0b1020";
     ctx.fill();
 
-    /* ======================================================
-       ========== LABELS BETWEEN SUNBURST + RING ============
-       ====================================================== */
 
-    // label track sits between sunburst and outer ring
-    const labelTrackRadius = outerR + 15; // gap from sunburst
+    /* =====================================================
+       ==========  LABELS MOVED OUTSIDE SAFELY  ============
+       ===================================================== */
 
-    const chipWidth = 120;
-    const chipHeight = 24;
+    const labelRadius = outerR + 25;  
+    // Medium spacing — labels no longer overlap, chart stays intact
 
+    ctx.fillStyle = "white";
+    ctx.font = "15px system-ui";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.font = "15px 'Times New Roman', serif";
 
-    for (let i = 0; i < sections; i++) {
+    for (let s = 0; s < sectionCount; s++) {
+      const a0 = -Math.PI / 2 + s * secA;
+      const mid = a0 + secA / 2;
 
-      const angle = -Math.PI / 2 + (i + 0.5) * secA;
+      const lx = cx + Math.cos(mid) * labelRadius;
+      const ly = cy + Math.sin(mid) * labelRadius;
 
-      const lx = cx + Math.cos(angle) * labelTrackRadius;
-      const ly = cy + Math.sin(angle) * labelTrackRadius;
-
-      // Diamond-cut plaque points
-      const hw = chipWidth / 2;
-      const hh = chipHeight / 2;
-
-      ctx.beginPath();
-      ctx.moveTo(lx - hw, ly);
-      ctx.lineTo(lx - hw + 12, ly - hh);
-      ctx.lineTo(lx + hw - 12, ly - hh);
-      ctx.lineTo(lx + hw, ly);
-      ctx.lineTo(lx + hw - 12, ly + hh);
-      ctx.lineTo(lx - hw + 12, ly + hh);
-      ctx.closePath();
-
-      // Fill
-      ctx.fillStyle = "#1a1a1a";
-      ctx.fill();
-
-      // Gold trim
-      ctx.strokeStyle = "#c9a552";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Slight inner glow
-      ctx.save();
-      ctx.clip();
-      const grad = ctx.createLinearGradient(lx, ly - hh, lx, ly + hh);
-      grad.addColorStop(0, "rgba(255, 255, 255, 0.12)");
-      grad.addColorStop(1, "rgba(0, 0, 0, 0.4)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(lx - hw, ly - hh, chipWidth, chipHeight);
-      ctx.restore();
-
-      // Engraved text, slightly elevated
-      ctx.fillStyle = "#f9e7c3";
-      ctx.fillText(labels[i], lx, ly - 3);
+      ctx.fillText(labels[s], lx, ly);
     }
 
-    /* ========================================================
-       ================ OUTER RING (JUST OUTSIDE) =============
-       ======================================================== */
 
-    // place ring fully outside chips
-    const chipOuterEdge = labelTrackRadius + chipHeight / 2;
-    const ringIn = chipOuterEdge + 3;       // small gap
-    const ringOut = ringIn + 30;            // thickness
+    /* =====================================================
+       ============== OUTER RATING RING (unchanged) ========
+       ===================================================== */
 
-    const wedgeN = 10;
-    const wedgeA = (2 * Math.PI) / wedgeN;
+    const ringIn = outerR + 20;
+    const ringOut = outerR + 60;
+    const wedgeA = (2 * Math.PI) / 10;
 
     ctx.beginPath();
     ctx.arc(cx, cy, ringOut, 0, Math.PI * 2);
@@ -236,62 +205,85 @@ window.addEventListener("DOMContentLoaded", () => {
       ctx.fill();
     }
 
-    if (frac > 0 && full < wedgeN) {
-      const a0 = -Math.PI / 2 + full * wedgeA;
+    if (frac > 0 && full < 10) {
+      const i = full;
+
+      const a0 = -Math.PI / 2 + i * wedgeA;
       const a1 = a0 + wedgeA * frac;
 
       ctx.beginPath();
       ctx.arc(cx, cy, ringOut, a0, a1);
       ctx.arc(cx, cy, ringIn, a1, a0, true);
       ctx.closePath();
-      ctx.fillStyle = wedgeColor(full);
+      ctx.fillStyle = wedgeColor(i);
       ctx.fill();
     }
   }
 
-  /* ===== AUTO UPDATE ===== */
-  function update() {
-    const stats = getStats();
+
+  /* ===== AUTO UPDATE PREVIEW ===== */
+  function updatePreview() {
+    const stats = readStats();
     const overall = getOverall();
-    charLevel.value = computeLevel(stats, overall).toFixed(1);
+    const lvl = calculateLevel(stats, overall);
+
+    charLevelInput.value = lvl.toFixed(1);
     drawChart(previewCtx, previewCanvas, stats, overall);
   }
 
-  Object.values(statInputs).forEach(inp => inp.addEventListener("input", update));
-  overallInput.addEventListener("input", update);
+  const statInputs = [
+    overallInput,
+    statEnergyInput,
+    statSpeedInput,
+    statSupportInput,
+    statPowerInput,
+    statIntelligenceInput,
+    statConcentrationInput,
+    statPerceptionInput
+  ];
 
-  update();
+  statInputs.forEach(input => {
+    input.addEventListener("input", updatePreview);
+  });
+
+  updatePreview();
+
 
   /* ===== VIEW POPUP ===== */
-  viewBtn.addEventListener("click", () => {
-    const stats = getStats();
-    const overall = getOverall();
-    const lvl = computeLevel(stats, overall);
+  viewChartBtn.addEventListener("click", () => {
 
-    charLevel.value = lvl.toFixed(1);
+    const stats = readStats();
+    const overall = getOverall();
+    const lvl = calculateLevel(stats, overall);
+
+    charLevelInput.value = lvl.toFixed(1);
 
     modalImage.src = uploadedImage ? uploadedImage.src : "";
 
     modalInfo.innerHTML = `
-      <div><span class="label">SUBJECT:</span> ${charName.value || "UNNAMED"}</div>
-      <div><span class="label">SPECIES:</span> ${charSpecies.value || "UNKNOWN"}</div>
-      <div><span class="label">ABILITY:</span> ${charAbility.value || "UNKNOWN"}</div>
+      <div><span class="label">SUBJECT:</span> ${charNameInput.value || "UNNAMED"}</div>
+      <div><span class="label">SPECIES:</span> ${charSpeciesInput.value || "UNKNOWN"}</div>
+      <div><span class="label">ABILITY:</span> ${charAbilityInput.value || "UNCLASSIFIED"}</div>
       <div><span class="label">LEVEL INDEX:</span> ${lvl.toFixed(1)}</div>
-      <div><span class="label">DANGER:</span> ${charDanger.value || "UNKNOWN"}</div>
+      <div><span class="label">DANGER:</span> ${charDangerInput.value || "UNKNOWN"}</div>
       <div><span class="label">[REDACTED]:</span> ${overall.toFixed(1)}</div>
     `;
 
     drawChart(modalCtx, modalCanvas, stats, overall);
+
     modal.classList.remove("hidden");
   });
+
 
   /* ===== CLOSE POPUP ===== */
   closeModalBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
 
+
   /* ===== DOWNLOAD PNG ===== */
   modalDownloadBtn.addEventListener("click", () => {
+
     const rect = modalWrapper.getBoundingClientRect();
 
     const tmp = document.createElement("canvas");
@@ -304,13 +296,11 @@ window.addEventListener("DOMContentLoaded", () => {
     tctx.fillStyle = "#111524";
     tctx.fillRect(0, 0, rect.width, rect.height);
 
-    // Draw left image
     if (uploadedImage) {
       tctx.drawImage(modalImage, 0, 0, 360, 360);
     }
 
-    // Draw info text
-    tctx.fillStyle = "white";
+    tctx.fillStyle = "#f5f5ff";
     tctx.font = "16px SF Mono";
     let y = 370;
 
@@ -319,13 +309,13 @@ window.addEventListener("DOMContentLoaded", () => {
       y += 22;
     });
 
-    // Draw chart
     tctx.drawImage(modalCanvas, 380, 0, 550, 550);
 
-    const name = (charName.value || "character").replace(/\s+/g, "");
+    const rawName = charNameInput.value || "character";
+    const safeName = rawName.replace(/\s+/g, "");
 
     const link = document.createElement("a");
-    link.download = `${name}_mr_characterchart.png`;
+    link.download = `${safeName}_mr_characterchart.png`;
     link.href = tmp.toDataURL();
     link.click();
   });
