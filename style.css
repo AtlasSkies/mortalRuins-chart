@@ -1,4 +1,3 @@
-/* style.css */
 body {
   margin: 0;
   background: #f8f2e7;
@@ -87,7 +86,7 @@ select:focus {
   border-color: #a47a44;
 }
 
-/* 25% larger preview image */
+/* Larger image preview */
 #imagePreview {
   width: 175px;
   height: 175px;
@@ -97,7 +96,6 @@ select:focus {
   background: #fff;
 }
 
-/* 25% larger modal image */
 .modal-image-frame {
   width: 325px;
   height: 410px;
@@ -174,12 +172,14 @@ canvas {
   cursor: pointer;
 }
 
+/* Wrapper layout */
 #modalWrapper {
   display: grid;
   grid-template-columns: 330px 1fr 400px;
   gap: 18px;
 }
 
+/* Modal Info Block (big box containing both sections) */
 .modal-info-block {
   background: #fffdf8;
   border: 1px solid #c9b18c;
@@ -189,22 +189,37 @@ canvas {
   box-shadow: inset 0 0 12px rgba(0,0,0,0.08);
 }
 
-.modal-info-block .label {
+/* Section titles inside the same box */
+.section-title {
+  font-size: 1rem;
   font-weight: bold;
-  color: #6e5438;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  margin-right: 4px;
-}
-
-.label-group-title {
-  margin-top: 10px;
+  color: #4d3a26;
   margin-bottom: 4px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: #7b5a39;
+  margin-top: 10px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  border-bottom: 1px solid #c8b08b;
+  padding-bottom: 2px;
+}
+
+/* Info lines */
+.info-line {
+  margin-left: 6px;
+  margin-bottom: 4px;
+}
+
+/* Metrics (indented) */
+.metric-line {
+  margin-left: 18px;
+  margin-bottom: 4px;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: #6e5438;
+  margin-right: 4px;
+  text-transform: uppercase;
 }
 
 .chart-frame {
