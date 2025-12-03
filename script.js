@@ -144,32 +144,53 @@ window.addEventListener("DOMContentLoaded", () => {
        ========== LABELS BETWEEN SUNBURST + RING ============
        ====================================================== */
 
-    const labelRadius = outerR + 10; // << medium spacing (Option B)
+    const labelTrackRadius = outerR + 30; // increased spacing  
 
-    ctx.fillStyle = "white";
-    ctx.font = "15px system-ui";
+    const chipWidth = 120;
+    const chipHeight = 28;
+
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
+    ctx.font = "15px 'Times New Roman', serif";
 
     for (let i = 0; i < sections; i++) {
-      const a0 = -Math.PI / 2 + i * secA;
-      const mid = a0 + secA / 2;
 
-      const lx = cx + Math.cos(mid) * labelRadius;
-      const ly = cy + Math.sin(mid) * labelRadius;
+      const angle = -Math.PI / 2 + (i + 0.5) * secA;
 
-      ctx.fillText(labels[i], lx, ly);
+      const lx = cx + Math.cos(angle) * labelTrackRadius;
+      const ly = cy + Math.sin(angle) * labelTrackRadius;
+
+      /* ---------------- Diamond Plaque ---------------- */
+      const hw = chipWidth / 2;
+      const hh = chipHeight / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(lx - hw, ly);
+      ctx.lineTo(lx - hw + 12, ly - hh);
+      ctx.lineTo(lx + hw - 12, ly - hh);
+      ctx.lineTo(lx + hw, ly);
+      ctx.lineTo(lx + hw - 12, ly + hh);
+      ctx.lineTo(lx - hw + 12, ly + hh);
+      ctx.closePath();
+
+      ctx.fillStyle = "#1a1a1a"; 
+      ctx.fill();
+
+      ctx.strokeStyle = "#c9a552"; 
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      /* ---------------- Engraved Text ---------------- */
+      ctx.fillStyle = "#f9e7c3";
+      ctx.fillText(labels[i], lx, ly - 3); // slightly elevated text
     }
 
     /* ========================================================
        ================ OUTER RING (SHRUNK 10%) ===============
        ======================================================== */
 
-    // ORIGINAL ringOut = outerR + 60
-    // ORIGINAL ringIn = outerR + 20
-
-    const ringIn = (outerR + 20) * 0.90;   // 10% shrink
-    const ringOut = (outerR + 60) * 0.90;  // 10% shrink
+    const ringIn = (outerR + 20) * 0.90;   
+    const ringOut = (outerR + 60) * 0.90;  
 
     const wedgeN = 10;
     const wedgeA = (2 * Math.PI) / wedgeN;
