@@ -28,31 +28,34 @@
         <div class="form-grid">
 
           <label>
-            Name
+            <div class="field-row">
+              <span class="field-title">Name</span>
+              <input type="checkbox" id="redactName" class="redact-checkbox" title="Black out on dossier">
+            </div>
             <input id="charName" type="text">
           </label>
 
           <label>
-            Character ID
-            <div class="id-row">
-              <input id="charIdLetters" type="text" maxlength="3" placeholder="ABC">
-              <span class="id-dash">—</span>
-              <input id="charIdNumbers" type="text" maxlength="9" placeholder="123456789">
+            <div class="field-row">
+              <span class="field-title">Species</span>
+              <input type="checkbox" id="redactSpecies" class="redact-checkbox" title="Black out on dossier">
             </div>
-          </label>
-
-          <label>
-            Species
             <input id="charSpecies" type="text">
           </label>
 
           <label>
-            Ability
+            <div class="field-row">
+              <span class="field-title">Ability</span>
+              <input type="checkbox" id="redactAbility" class="redact-checkbox" title="Black out on dossier">
+            </div>
             <input id="charAbility" type="text">
           </label>
 
           <label>
-            Patron God
+            <div class="field-row">
+              <span class="field-title">Patron God</span>
+              <input type="checkbox" id="redactGod" class="redact-checkbox" title="Black out on dossier">
+            </div>
             <select id="charGod">
               <option selected>Unknown</option>
               <option>Dead</option>
@@ -71,7 +74,10 @@
           </label>
 
           <label>
-            Danger Level
+            <div class="field-row">
+              <span class="field-title">Danger Level</span>
+              <input type="checkbox" id="redactDanger" class="redact-checkbox" title="Black out on dossier">
+            </div>
             <select id="charDanger">
               <option>None</option>
               <option>Low</option>
@@ -82,7 +88,10 @@
           </label>
 
           <label>
-            Level
+            <div class="field-row">
+              <span class="field-title">Level Index</span>
+              <input type="checkbox" id="redactLevel" class="redact-checkbox" title="Black out on dossier">
+            </div>
             <input id="charLevel" type="text" readonly>
           </label>
 
