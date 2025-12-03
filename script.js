@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const downloadBtn = document.getElementById("modalDownloadBtn");
 
   /* --------------------------------------------- */
-  /* IMAGE UPLOAD                                  */
+  /* IMAGE UPLOAD + AUTO-FIT PREVIEW               */
   /* --------------------------------------------- */
   imageUpload.addEventListener("change", e => {
     const file = e.target.files[0];
@@ -108,7 +108,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   /* --------------------------------------------- */
-  /* UPDATED DRAW CHART                            */
+  /* UPDATED DRAW CHART (sunburst + ring inward)   */
   /* --------------------------------------------- */
   function drawChart(ctx, canvas, stats, overallVal) {
 
@@ -122,15 +122,15 @@ window.addEventListener("DOMContentLoaded", () => {
     const secCount = 7;
     const rings = 10;
 
-    /* Sunburst Scale Up */
+    /* Sunburst bigger */
     const sunburstScale = 1.08;
 
-    /* Ring reduced only slightly (option A ~15%) */
+    /* Base scale for ring thickness */
     const ringScale = 0.85;
 
     const maxRadius = (w / 2) * sunburstScale;
 
-    const inner = 0;                       // Start at center
+    const inner = 0;                        /* Start sunburst at center */
     const outer = maxRadius * 0.78;
     const ringT = (outer - inner) / rings;
 
@@ -160,17 +160,25 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* Center Circle */
+    /* Center circle */
     ctx.beginPath();
     ctx.arc(cx, cy, outer * 0.12, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    /* --------- OUTER RING --------- */
-    const ringIn = outer + (28 * ringScale);
-    const ringOut = outer + (74 * ringScale);
+    /* --------- OUTER RING (pulled inward 25%) --------- */
+
+    const originalOffsetInner = 28 * ringScale;
+    const originalOffsetOuter = 74 * ringScale;
+
+    const offsetShift = 0.25;   /* 25% closer to sunburst */
+
+    const ringIn = outer + originalOffsetInner * (1 - offsetShift);
+    const ringOut = outer + originalOffsetOuter * (1 - offsetShift);
+
     const wedgeA = (2 * Math.PI) / 10;
 
+    /* Background ring */
     ctx.beginPath();
     ctx.arc(cx, cy, ringOut, 0, Math.PI * 2);
     ctx.arc(cx, cy, ringIn, Math.PI * 2, 0, true);
@@ -185,6 +193,7 @@ window.addEventListener("DOMContentLoaded", () => {
       return `hsl(220, 30%, ${70 - i * 4}%)`;
     }
 
+    /* Full wedges */
     for (let i = 0; i < full; i++) {
       const a0 = -Math.PI / 2 + i * wedgeA;
       const a1 = a0 + wedgeA;
@@ -197,6 +206,7 @@ window.addEventListener("DOMContentLoaded", () => {
       ctx.fill();
     }
 
+    /* Fractional wedge */
     if (frac > 0) {
       const i = full;
       const a0 = -Math.PI / 2 + i * wedgeA;
@@ -264,6 +274,7 @@ window.addEventListener("DOMContentLoaded", () => {
   /* DOWNLOAD CHART                                */
   /* --------------------------------------------- */
   downloadBtn.addEventListener("click", () => {
+
     const wrap = document.getElementById("modalWrapper");
     const rect = wrap.getBoundingClientRect();
 
@@ -277,10 +288,12 @@ window.addEventListener("DOMContentLoaded", () => {
     tctx.fillStyle = "#ffffff";
     tctx.fillRect(0, 0, rect.width, rect.height);
 
+    /* Render image */
     if (uploadedImage) {
-      tctx.drawImage(modalImage, 10, 10, 300, 300);
+      tctx.drawImage(modalImage, 10, 10, 240, 300);
     }
 
+    /* Render text */
     tctx.fillStyle = "#000";
     tctx.font = "18px Georgia";
     let y = 330;
@@ -289,8 +302,10 @@ window.addEventListener("DOMContentLoaded", () => {
       y += 26;
     });
 
+    /* Render chart */
     tctx.drawImage(modalCanvas, 350, 10);
 
+    /* Download */
     const name = (charName.value || "character").replace(/\s+/g, "");
     const link = document.createElement("a");
     link.download = `${name}_mr_characterchart.png`;
