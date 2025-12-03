@@ -1,10 +1,8 @@
-/* GLOBAL — white parchment theme */
-
 body {
   margin: 0;
-  background: #f8f2e7; /* parchment-like white */
-  color: #3b2e1d;
-  font-family: "Georgia", serif;
+  background: radial-gradient(circle at top, #0f1224 0%, #050711 55%, #020308 100%);
+  color: #f5f5ff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .page-container {
@@ -15,33 +13,35 @@ body {
 
 header h1 {
   text-align: center;
-  margin: 0;
-  font-size: 2rem;
+  margin: 0 0 4px;
   letter-spacing: 0.08em;
-  color: #3b2e1d;
 }
 
 .subtitle {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 1rem;
-  color: #6e5438;
+  margin: 0 0 20px;
+  font-size: 0.9rem;
+  color: #98a4ff;
 }
-
-/* MAIN LAYOUT */
 
 main {
   display: flex;
   gap: 20px;
 }
 
+/* ---- Panels ---- */
+
 .form-section,
 .chart-section {
-  background: #ffffff;
+  background: linear-gradient(145deg, #13182b, #090c18);
   padding: 20px;
   border-radius: 14px;
-  border: 2px solid #d2b995;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(122, 156, 255, 0.15);
+}
+
+.form-section {
+  flex: 1;
 }
 
 .chart-section {
@@ -49,74 +49,87 @@ main {
   text-align: center;
 }
 
-/* FORMS */
+/* ---- Layout ---- */
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 10px;
 }
 
 label {
-  font-size: 0.95rem;
   display: flex;
   flex-direction: column;
-  color: #4a3824;
-}
-
-input, select {
-  padding: 8px;
-  border-radius: 6px;
-  background: #fff8ee;
-  border: 1px solid #c8b08b;
-  color: #3b2e1d;
   font-size: 0.9rem;
 }
 
-input:focus, select:focus {
-  border-color: #a47a44;
+/* ---- Inputs ---- */
+
+input {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(138, 159, 255, 0.3);
+  background: #151c35;
+  color: white;
+  font-size: 0.9rem;
+}
+
+input:focus {
   outline: none;
-  box-shadow: 0 0 4px rgba(164,122,68,0.6);
+  border-color: #8f9dff;
+  box-shadow: 0 0 0 1px rgba(143, 157, 255, 0.4);
 }
 
 #imagePreview {
   width: 140px;
   height: 140px;
-  margin-top: 8px;
   object-fit: cover;
+  margin-top: 10px;
   border-radius: 10px;
-  border: 2px solid #c8b08b;
-  background: #fff;
+  background: #1b2342;
+  border: 1px solid #2d355a;
 }
 
-/* BUTTONS */
+.file-label input {
+  margin-top: 6px;
+}
+
+.button-row {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
 
 button {
-  padding: 10px 16px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #7f5af0, #2cb67d);
+  color: white;
   border: none;
-  background: linear-gradient(135deg,#e4c89b,#f8e4c1);
   border-radius: 999px;
   cursor: pointer;
-  font-weight: 700;
-  color: #5a432a;
-  letter-spacing: 0.05em;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.5);
 }
 
 button:hover {
-  background: linear-gradient(135deg,#f0dcb5,#ffeccf);
+  transform: translateY(-1px);
 }
 
-/* CANVAS */
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+}
+
+/* ---- Preview Canvas ---- */
 
 canvas {
   margin-top: 20px;
-  background: #ffffff;
-  border: 2px solid #d3b892;
+  background: radial-gradient(circle at center, #151b35 0%, #050712 100%);
   border-radius: 12px;
 }
 
-/* MODAL OVERLAY */
+/* ---------------- MODAL (GOV FILE STYLE) ---------------- */
 
 .modal.hidden {
   display: none;
@@ -125,125 +138,130 @@ canvas {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(245,240,229,0.95);
+  background: radial-gradient(circle at top, rgba(6,10,35,0.95), rgba(1,2,8,0.95));
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 28px;
-  z-index: 999;
+  padding: 30px;
+  z-index: 1000;
 }
-
-/* POPUP (10% smaller) */
 
 .modal-content {
-  transform: scale(0.9);
-  background: #ffffff;
-  border: 2px solid #c8ae86;
-  border-radius: 14px;
-  padding: 20px 24px;
-  width: 88%;
-  max-width: 1150px;
+  background: radial-gradient(circle at top left, #151a30, #050815);
+  padding: 20px 22px 22px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 1300px;
   position: relative;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.85);
 }
 
-/* X BUTTON */
+/* Close button */
 
 .close-btn {
   position: absolute;
-  right: 20px;
-  top: 16px;
-  background: #b44a4a;
+  right: 12px;
+  top: 10px;
+  background: #ff3d5f;
+  border: none;
+  border-radius: 999px;
   color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 20px;
   cursor: pointer;
-  font-size: 18px;
 }
 
-/* POPUP HEADER */
+/* Gov header strip */
 
 .gov-header {
-  border-bottom: 2px solid #d3b892;
+  border-bottom: 1px solid rgba(120, 255, 255, 0.4);
   padding-bottom: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.gov-title-main {
-  font-size: 1.5rem;
+.gov-tag {
+  font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #3b2e1d;
+  color: #00f5ff;
 }
 
-.gov-title-sub {
-  font-size: 1.05rem;
-  color: #735b3f;
+.gov-meta {
   margin-top: 4px;
+  font-size: 0.8rem;
+  color: #ffc857;
 }
 
-/* POPUP LAYOUT */
+/* Modal body layout */
 
 #modalWrapper {
-  display: grid;
-  grid-template-columns: 330px 1fr 520px;
-  gap: 18px;
+  display: flex;
+  gap: 26px;
+  margin-top: 8px;
 }
 
-/* LEFT IMAGE */
+/* Left: image + info */
 
-.modal-parchment {
-  background: #fff8e7;
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid #d2b995;
+.modal-left {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .modal-image-frame {
   border-radius: 10px;
-  border: 2px solid #a68c63;
-  background: #ffffff;
+  padding: 8px;
+  background: radial-gradient(circle at top, #141b38, #070a18);
+  border: 1px solid rgba(0, 255, 255, 0.35);
 }
 
 #modalImage {
   width: 100%;
   border-radius: 8px;
+  object-fit: cover;
 }
-
-/* CENTER INFO */
 
 .modal-info-block {
-  background: #fffdf8;
+  padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #c9b18c;
-  padding: 14px;
-  color: #3b2e1d;
-  font-size: 1.1rem;
-  line-height: 1.7rem;
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.08);
+  background: #111524;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.9rem;
+  color: #e2e6ff;
+  line-height: 1.5rem;
 }
 
-.modal-info-block .label {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  color: #6e5438;
-}
+/* Right: chart */
 
-/* CHART FRAME */
+.modal-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .chart-frame {
-  background: #fffaf2;
+  width: 100%;
+  padding: 10px;
   border-radius: 12px;
-  padding: 12px;
-  border: 2px solid #d5bf9a;
-  box-shadow: inset 0 0 12px rgba(0,0,0,0.05);
+  background: radial-gradient(circle at top, #151c3c, #060816);
+  border: 1px solid rgba(0, 255, 255, 0.25);
 }
 
-.chart-frame-label {
-  text-align: center;
-  margin-bottom: 6px;
-  color: #4d3a26;
-  text-transform: uppercase;
-  font-weight: 600;
+.download-btn {
+  margin-top: 12px;
+  background: linear-gradient(135deg, #ff7a8a, #ffbf69);
+}
+
+/* ========================================================= */
+/*       ⭐ NEW: SHRINK POPUP RUINS POWER WHEEL 10%          */
+/* ========================================================= */
+
+#modalChartCanvas {
+  transform: scale(0.90);      /* 10% smaller */
+  transform-origin: top left;  /* Scale from top-left so layout stays stable */
 }
