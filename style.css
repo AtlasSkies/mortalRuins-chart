@@ -89,18 +89,18 @@ select:focus {
 
 /* 25% larger preview image */
 #imagePreview {
-  width: 175px;   /* was 140 */
-  height: 175px;  /* was 140 */
+  width: 175px;
+  height: 175px;
   object-fit: cover;
   border-radius: 12px;
   border: 2px solid #c8b08b;
   background: #fff;
 }
 
-/* SHRUNK + AUTO-FIT MODAL IMAGE (25% larger) */
+/* 25% larger modal image */
 .modal-image-frame {
-  width: 325px;      /* was 260 */
-  height: 410px;     /* was 330 */
+  width: 325px;
+  height: 410px;
   border-radius: 14px;
   overflow: hidden;
   border: 2px solid #c8b08b;
@@ -111,13 +111,13 @@ select:focus {
 }
 
 #modalImage {
-  width: 300px;        /* was 240 */
-  height: auto;
-  max-height: 395px;   /* was 320 */
+  width: 300px;
+  max-height: 395px;
   object-fit: cover;
   border-radius: 10px;
 }
 
+/* Buttons */
 button {
   padding: 10px 16px;
   border: none;
@@ -132,6 +132,7 @@ button:hover {
   background: linear-gradient(135deg,#f0dcb5,#ffeccf);
 }
 
+/* Chart canvas */
 canvas {
   margin-top: 20px;
   background: #ffffff;
@@ -139,6 +140,7 @@ canvas {
   border-radius: 12px;
 }
 
+/* Modal */
 .modal.hidden {
   display: none;
 }
@@ -175,6 +177,7 @@ canvas {
   cursor: pointer;
 }
 
+/* Popup layout */
 #modalWrapper {
   display: grid;
   grid-template-columns: 330px 1fr 400px;
@@ -211,18 +214,11 @@ canvas {
   color: #4d3a26;
 }
 
-/* Optional: basic styling for file label & buttons */
 .file-label {
   display: inline-flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 10px;
-}
-
-.file-label input[type="file"] {
-  padding: 4px;
-  background: transparent;
-  border: none;
 }
 
 .button-row {
