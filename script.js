@@ -5,7 +5,6 @@ function clamp(v, min, max) {
 let uploadedImage = null;
 
 window.addEventListener("DOMContentLoaded", () => {
-
   const previewCanvas = document.getElementById("fullChartCanvas");
   const previewCtx = previewCanvas.getContext("2d");
 
@@ -22,7 +21,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const charDanger = document.getElementById("charDanger");
   const charLevel = document.getElementById("charLevel");
 
-  // Redaction checkboxes
   const redactName = document.getElementById("redactName");
   const redactSpecies = document.getElementById("redactSpecies");
   const redactAbility = document.getElementById("redactAbility");
@@ -47,16 +45,16 @@ window.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("closeModalBtn");
   const modalImage = document.getElementById("modalImage");
   const modalInfo = document.getElementById("modalInfo");
-  const fileTypeGod = document.getElementById("fileTypeGod");
   const downloadBtn = document.getElementById("modalDownloadBtn");
 
-  /* IMAGE UPLOAD */
-  imageUpload.addEventListener("change", e => {
+  imageUpload.addEventListener("change", (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     const reader = new FileReader();
-    reader.onload = ev => {
+    reader.onload = (ev) => {
       const img = new Image();
       img.onload = () => {
         uploadedImage = img;
@@ -67,7 +65,6 @@ window.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  /* STATS */
   function getStats() {
     return [
       clamp(parseFloat(statInputs.energy.value), 1, 10),
@@ -88,13 +85,13 @@ window.addEventListener("DOMContentLoaded", () => {
     return stats.reduce((a, b) => a + b, 0) + ov * 3;
   }
 
-  /* REDACTION HELPER */
   function censored(checkbox, value) {
-    if (!value || value.trim() === "") return "Unknown";
+    if (!value || value.trim() === "") {
+      return "Unknown";
+    }
     return checkbox.checked ? "████████████████" : value;
   }
 
-  /* DRAW CHART (shortened) */
   function drawChart(ctx, canvas, stats, overallVal) {
     const w = canvas.width;
     const h = canvas.height;
@@ -106,7 +103,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const secCount = 7;
     const rings = 10;
     const sunburstScale = 1.08;
-    const ringScale = 0.85;
     const maxRadius = (w / 2) * sunburstScale;
     const inner = 0;
     const outer = maxRadius * 0.78;
@@ -115,7 +111,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const secA = (2 * Math.PI) / secCount;
     const hues = [0, 30, 55, 130, 210, 255, 280];
 
-    /* SUNBURST */
     for (let i = 0; i < secCount; i++) {
       const a0 = -Math.PI / 2 + i * secA;
       const a1 = a0 + secA;
@@ -135,13 +130,11 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /* CENTER (unsaturated tone) */
     ctx.beginPath();
     ctx.arc(cx, cy, outer * 0.12, 0, Math.PI * 2);
     ctx.fillStyle = "hsl(40, 10%, 88%)";
     ctx.fill();
 
-    /* OUTER RING */
     const ringIn = outer;
     const ringOut = ringIn + 26;
 
@@ -164,6 +157,7 @@ window.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < full; i++) {
       const a0 = -Math.PI / 2 + i * wedgeA;
       const a1 = a0 + wedgeA;
+
       ctx.beginPath();
       ctx.arc(cx, cy, ringOut, a0, a1);
       ctx.arc(cx, cy, ringIn, a1, a0, true);
@@ -176,6 +170,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const i = full;
       const a0 = -Math.PI / 2 + i * wedgeA;
       const a1 = a0 + wedgeA * frac;
+
       ctx.beginPath();
       ctx.arc(cx, cy, ringOut, a0, a1);
       ctx.arc(cx, cy, ringIn, a1, a0, true);
@@ -185,27 +180,28 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* LIVE PREVIEW */
   function updatePreview() {
     const stats = getStats();
     const ov = getOverall();
+
     charLevel.value = computeLevel(stats, ov).toFixed(1);
     drawChart(previewCtx, previewCanvas, stats, ov);
   }
 
-  Object.values(statInputs).forEach(i => i.addEventListener("input", updatePreview));
+  Object.values(statInputs).forEach((input) => {
+    input.addEventListener("input", updatePreview);
+  });
+
   overall.addEventListener("input", updatePreview);
+
   updatePreview();
 
-  /* OPEN POPUP */
   viewBtn.addEventListener("click", () => {
-
     const stats = getStats();
     const ov = getOverall();
     const lvl = computeLevel(stats, ov);
 
     charLevel.value = lvl.toFixed(1);
-    fileTypeGod.textContent = charGod.value;
 
     modalImage.src = uploadedImage ? uploadedImage.src : "";
 
@@ -219,16 +215,15 @@ window.addEventListener("DOMContentLoaded", () => {
       "Perception"
     ];
 
-    /* BUILD INFO BOX CONTENT */
     let infoHTML = "";
 
     infoHTML += `<div class="section-title">Information</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Name:</span> ${censored(redactName,charName.value)}</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Species:</span> ${censored(redactSpecies,charSpecies.value)}</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Ability:</span> ${censored(redactAbility,charAbility.value)}</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Patron God:</span> ${censored(redactGod,charGod.value)}</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Danger Level:</span> ${censored(redactDanger,charDanger.value)}</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Level Index:</span> ${censored(redactLevel,lvl.toFixed(1))}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Name:</span> ${censored(redactName, charName.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Species:</span> ${censored(redactSpecies, charSpecies.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Ability:</span> ${censored(redactAbility, charAbility.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Patron God:</span> ${censored(redactGod, charGod.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Danger Level:</span> ${censored(redactDanger, charDanger.value)}</div>`;
+    infoHTML += `<div class="info-line"><span class="label">Level Index:</span> ${censored(redactLevel, lvl.toFixed(1))}</div>`;
 
     infoHTML += `<div class="section-title" style="margin-top:14px;">Ability Metrics</div>`;
 
@@ -247,29 +242,26 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.classList.remove("hidden");
   });
 
-  /* CLOSE POPUP */
   closeBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
 
-  /* DOWNLOAD POPUP EXACTLY */
   downloadBtn.addEventListener("click", async () => {
-
     const modalContent = document.querySelector(".modal-content");
-    const closeBtn = document.getElementById("closeModalBtn");
-    const dlBtn = document.getElementById("modalDownloadBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modalDownloadBtn = document.getElementById("modalDownloadBtn");
 
-    closeBtn.style.display = "none";
-    dlBtn.style.display = "none";
+    closeModalBtn.style.display = "none";
+    modalDownloadBtn.style.display = "none";
 
-    await new Promise(r => setTimeout(r, 50));
+    await new Promise((resolve) => setTimeout(resolve, 50));
 
     html2canvas(modalContent, {
       backgroundColor: "#ffffff",
       scale: 2
-    }).then(canvas => {
-      closeBtn.style.display = "";
-      dlBtn.style.display = "";
+    }).then((canvas) => {
+      closeModalBtn.style.display = "";
+      modalDownloadBtn.style.display = "";
 
       const name = (charName.value || "character").replace(/\s+/g, "");
       const link = document.createElement("a");
@@ -278,5 +270,4 @@ window.addEventListener("DOMContentLoaded", () => {
       link.click();
     });
   });
-
 });
