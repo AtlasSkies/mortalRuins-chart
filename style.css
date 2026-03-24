@@ -94,7 +94,6 @@ textarea {
   font-family: "Georgia", serif;
 }
 
-/* Larger image preview */
 #imagePreview {
   width: 175px;
   height: 175px;
@@ -180,14 +179,12 @@ canvas {
   cursor: pointer;
 }
 
-/* Wrapper layout */
 #modalWrapper {
   display: grid;
   grid-template-columns: 363px 1.1fr 400px;
   gap: 18px;
 }
 
-/* Modal Info Block */
 .modal-info-block {
   background: #fffdf8;
   border: 1px solid #c9b18c;
@@ -197,7 +194,6 @@ canvas {
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Section titles */
 .section-title {
   font-size: 1rem;
   font-weight: bold;
@@ -212,8 +208,7 @@ canvas {
 
 .info-line,
 .metric-line,
-.notes-line,
-.ability-level-line {
+.notes-line {
   margin-left: 12px;
   margin-bottom: 4px;
 }
@@ -261,18 +256,12 @@ canvas {
   width: 100%;
 }
 
-/* Ability metrics in 3 columns */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px 14px;
+  gap: 4px 12px;
   margin-left: 12px;
   margin-top: 8px;
-}
-
-.ability-level-line {
-  margin-top: 4px;
-  font-weight: bold;
 }
 
 .notes-block {
