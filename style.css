@@ -71,7 +71,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   padding: 8px;
   border-radius: 6px;
   background: #fff8ee;
@@ -81,9 +82,16 @@ select {
 }
 
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   outline: none;
   border-color: #a47a44;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: "Georgia", serif;
 }
 
 /* Larger image preview */
@@ -179,7 +187,7 @@ canvas {
   gap: 18px;
 }
 
-/* Modal Info Block (big box containing both sections) */
+/* Modal Info Block */
 .modal-info-block {
   background: #fffdf8;
   border: 1px solid #c9b18c;
@@ -189,12 +197,12 @@ canvas {
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Section titles inside the same box */
+/* Section titles */
 .section-title {
   font-size: 1rem;
   font-weight: bold;
   color: #4d3a26;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   margin-top: 10px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -202,9 +210,10 @@ canvas {
   padding-bottom: 2px;
 }
 
-/* Unified indentation for both info + metrics */
 .info-line,
-.metric-line {
+.metric-line,
+.notes-line,
+.ability-level-line {
   margin-left: 12px;
   margin-bottom: 4px;
 }
@@ -222,13 +231,6 @@ canvas {
   border-radius: 12px;
   padding: 12px;
   border: 2px solid #d5bf9a;
-}
-
-.chart-frame-label {
-  text-align: center;
-  margin-bottom: 6px;
-  font-weight: bold;
-  color: #4d3a26;
 }
 
 .file-label {
@@ -257,4 +259,49 @@ canvas {
 .download-btn {
   margin-top: 14px;
   width: 100%;
+}
+
+/* Ability metrics in 3 columns */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 14px;
+  margin-left: 12px;
+  margin-top: 8px;
+}
+
+.ability-level-line {
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+.notes-block {
+  margin-left: 12px;
+  margin-top: 8px;
+  white-space: pre-wrap;
+  line-height: 1.5rem;
+}
+
+@media (max-width: 1000px) {
+  #modalWrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+    flex-direction: column;
+  }
+
+  .chart-section {
+    width: auto;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
 }
