@@ -225,8 +225,7 @@ window.addEventListener("DOMContentLoaded", () => {
     infoHTML += `<div class="info-line"><span class="label">Patron God:</span> ${censored(redactGod, charGod.value)}</div>`;
     infoHTML += `<div class="info-line"><span class="label">Danger Level:</span> ${censored(redactDanger, charDanger.value)}</div>`;
 
-    infoHTML += `<div class="section-title" style="margin-top:14px;">Ability Metrics</div>`;
-    infoHTML += `<div class="ability-level-line"><span class="label">Ability Level:</span> ${censored(redactLevel, lvl.toFixed(1))}</div>`;
+    infoHTML += `<div class="section-title" style="margin-top:14px;">Ability Level: ${censored(redactLevel, lvl.toFixed(1))}</div>`;
     infoHTML += `<div class="metrics-grid">`;
 
     stats.forEach((val, idx) => {
