@@ -20,6 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const charGod = document.getElementById("charGod");
   const charDanger = document.getElementById("charDanger");
   const charLevel = document.getElementById("charLevel");
+  const charNotes = document.getElementById("charNotes");
 
   const redactName = document.getElementById("redactName");
   const redactSpecies = document.getElementById("redactSpecies");
@@ -223,9 +224,10 @@ window.addEventListener("DOMContentLoaded", () => {
     infoHTML += `<div class="info-line"><span class="label">Ability:</span> ${censored(redactAbility, charAbility.value)}</div>`;
     infoHTML += `<div class="info-line"><span class="label">Patron God:</span> ${censored(redactGod, charGod.value)}</div>`;
     infoHTML += `<div class="info-line"><span class="label">Danger Level:</span> ${censored(redactDanger, charDanger.value)}</div>`;
-    infoHTML += `<div class="info-line"><span class="label">Level Index:</span> ${censored(redactLevel, lvl.toFixed(1))}</div>`;
 
     infoHTML += `<div class="section-title" style="margin-top:14px;">Ability Metrics</div>`;
+    infoHTML += `<div class="ability-level-line"><span class="label">Ability Level:</span> ${censored(redactLevel, lvl.toFixed(1))}</div>`;
+    infoHTML += `<div class="metrics-grid">`;
 
     stats.forEach((val, idx) => {
       infoHTML += `
@@ -234,6 +236,11 @@ window.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
     });
+
+    infoHTML += `</div>`;
+
+    infoHTML += `<div class="section-title" style="margin-top:14px;">Additional Notes</div>`;
+    infoHTML += `<div class="notes-block">${charNotes.value.trim() ? charNotes.value : "None"}</div>`;
 
     modalInfo.innerHTML = infoHTML;
 
