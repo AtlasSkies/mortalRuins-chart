@@ -164,8 +164,8 @@ canvas {
   border: 2px solid #c8ae86;
   border-radius: 14px;
   padding: 20px;
-  width: 88%;
-  max-width: 1150px;
+  width: 96%;
+  max-width: 1380px;
   position: relative;
 }
 
@@ -183,7 +183,7 @@ canvas {
 /* Wrapper layout */
 #modalWrapper {
   display: grid;
-  grid-template-columns: 330px 1fr 400px;
+  grid-template-columns: 363px 1.1fr 400px;
   gap: 18px;
 }
 
